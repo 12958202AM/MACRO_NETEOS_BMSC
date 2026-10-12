@@ -8,6 +8,7 @@ Pagos, Ajuste u Otras Provisiones/Reversiones.
 | Archivo | Contenido |
 |---|---|
 | `Motor_Neteo_AM_v7.bas` | Macro actual (v7). Macro a ejecutar: `Account_Offset_Engine_AM_v7` |
+| `GUIA_USO_Motor_Neteo_AM_v7.txt` | Guía de uso para quien no conoce la macro |
 | `historico/Account_Offset_Engine_AM_v6.bas` | Versión anterior (v6), como referencia |
 
 ## Instalación
