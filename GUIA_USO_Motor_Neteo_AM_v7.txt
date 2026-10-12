@@ -6,7 +6,7 @@
 CONTENIDO
   1. ¿Qué hace la macro?
   2. Antes de empezar
-  3. Instalación
+  3. Abrir el Excel con la macro y contraseña
   4. Preparar la hoja
   5. Ejecución paso a paso
   6. Cómo leer los resultados
@@ -44,27 +44,46 @@ La macro:
 2. ANTES DE EMPEZAR
 ------------------------------------------------------------------------------------------
 
-  - Requiere Microsoft Excel para Windows, con macros habilitadas.
-  - GUARDE UNA COPIA DEL ARCHIVO antes de ejecutar. Lo que hace una macro no se puede
+  - Requiere Microsoft Excel para Windows.
+  - La macro viene ya cargada dentro del archivo Excel que se le compartió (.xlsm);
+    no hace falta importar nada.
+  - La macro está protegida con contraseña: AM (en mayúsculas).
+  - GUARDE UNA COPIA DEL ARCHIVO DE DATOS antes de ejecutar. Lo que hace una macro no se puede
     deshacer con Ctrl+Z.
   - La hoja no debe estar protegida.
   - Cierre otros procesos pesados de Excel si la base es muy grande.
 
 
 ------------------------------------------------------------------------------------------
-3. INSTALACIÓN
+3. ABRIR EL EXCEL CON LA MACRO Y CONTRASEÑA
 ------------------------------------------------------------------------------------------
 
-  1. Abra el libro de Excel donde va a trabajar.
-  2. Presione Alt + F11 (se abre el editor de Visual Basic).
-  3. Menú Archivo > Importar archivo... y elija "Motor_Neteo_AM_v7.bas".
-  4. Cierre el editor y guarde el libro como "Libro de Excel habilitado para macros"
-     (.xlsm).
+  1. Guarde en su equipo el archivo Excel compartido (.xlsm).
+  2. Si el archivo llegó por correo o se descargó de internet, Windows puede bloquear sus
+     macros. En ese caso: cierre el archivo, haga clic derecho sobre él > Propiedades >
+     marque "Desbloquear" > Aceptar, y vuelva a abrirlo.
+  3. Al abrirlo, si aparece la barra amarilla "ADVERTENCIA DE SEGURIDAD", presione
+     "Habilitar contenido".
 
-  Para tener la macro disponible en todos sus archivos, impórtela en el libro de macros
-  personal (PERSONAL.XLSB) en lugar del libro de trabajo.
+  CONTRASEÑA
+     Contraseña de la macro:  AM   (dos letras, en MAYÚSCULAS)
+     Ingrésela cuando Excel la solicite (al ejecutar la macro o al abrir el editor de
+     Visual Basic con Alt + F11).
 
-  Para ejecutarla: Alt + F8 > seleccione "Account_Offset_Engine_AM_v7" > Ejecutar.
+  DÓNDE TRABAJAR
+     Opción A: pegue los mayores en una hoja del mismo Excel que contiene la macro.
+     Opción B: abra su propio archivo de trabajo mientras el Excel de la macro sigue
+               abierto. La macro trabaja siempre sobre la HOJA ACTIVA, así que puede
+               ejecutarla desde su archivo (ver "Para ejecutarla").
+
+  PARA EJECUTARLA
+     1. Vaya a la hoja que contiene los datos (debe ser la hoja activa).
+     2. Presione Alt + F8.
+     3. Si trabaja en otro archivo, en "Macros en:" elija "Todos los libros abiertos".
+     4. Seleccione "Account_Offset_Engine_AM_v7" y presione "Ejecutar".
+     5. Si se solicita, ingrese la contraseña AM.
+
+  No cierre el Excel de la macro mientras la esté usando desde otro archivo.
 
 
 ------------------------------------------------------------------------------------------
