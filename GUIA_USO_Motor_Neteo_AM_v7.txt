@@ -1,0 +1,351 @@
+﻿==========================================================================================
+                    MOTOR DE NETEO Y CLASIFICACIÓN DE PARTIDAS - A.M. v7
+                                  GUÍA DE USO
+==========================================================================================
+
+CONTENIDO
+  1. ¿Qué hace la macro?
+  2. Antes de empezar
+  3. Abrir el Excel con la macro y contraseña
+  4. Preparar la hoja
+  5. Ejecución paso a paso
+  6. Cómo leer los resultados
+  7. Reportes en pantalla
+  8. Recomendaciones de uso
+  9. Problemas frecuentes
+ 10. Preguntas frecuentes
+
+
+------------------------------------------------------------------------------------------
+1. ¿QUÉ HACE LA MACRO?
+------------------------------------------------------------------------------------------
+
+La macro revisa los movimientos de uno o varios mayores contables (por ejemplo, el mayor
+de gasto y el mayor de pasivo de la misma cuenta) y encuentra las partidas que se
+compensan entre sí: un registro y su reverso, una provisión y su contrapartida, etc.
+
+Al terminar, agrega 4 columnas a la hoja que dicen, para cada partida:
+  - qué tipo de movimiento es (Provisiones/Reversiones, Neto, Pagos, Ajuste...),
+  - con qué otras partidas se cruzó (un código de cruce),
+  - con qué criterio se encontró ese cruce.
+
+Las partidas que no se compensan con nada quedan clasificadas como saldos residuales
+(por ejemplo, Pagos), que normalmente son las que se analizan o se muestrean.
+
+La macro:
+  - NO borra ni modifica los datos originales (solo agrega las columnas de resultado y,
+    si hace falta, convierte a número los importes guardados como texto).
+  - NO reordena la hoja: las filas quedan en el mismo orden.
+  - NO necesita columnas auxiliares (ABS, CONCATENAR, BUSCARV).
+  - Trabaja en memoria, por lo que procesa bases grandes en poco tiempo.
+
+
+------------------------------------------------------------------------------------------
+2. ANTES DE EMPEZAR
+------------------------------------------------------------------------------------------
+
+  - Requiere Microsoft Excel para Windows.
+  - La macro viene ya cargada dentro del archivo Excel que se le compartió (.xlsm);
+    no hace falta importar nada.
+  - La macro está protegida con contraseña: AM (en mayúsculas).
+  - GUARDE UNA COPIA DEL ARCHIVO DE DATOS antes de ejecutar. Lo que hace una macro no se puede
+    deshacer con Ctrl+Z.
+  - La hoja no debe estar protegida.
+  - Cierre otros procesos pesados de Excel si la base es muy grande.
+
+
+------------------------------------------------------------------------------------------
+3. ABRIR EL EXCEL CON LA MACRO Y CONTRASEÑA
+------------------------------------------------------------------------------------------
+
+  1. Guarde en su equipo el archivo Excel compartido (.xlsm).
+  2. Si el archivo llegó por correo o se descargó de internet, Windows puede bloquear sus
+     macros. En ese caso: cierre el archivo, haga clic derecho sobre él > Propiedades >
+     marque "Desbloquear" > Aceptar, y vuelva a abrirlo.
+  3. Al abrirlo, si aparece la barra amarilla "ADVERTENCIA DE SEGURIDAD", presione
+     "Habilitar contenido".
+
+  CONTRASEÑA
+     Contraseña de la macro:  AM   (dos letras, en MAYÚSCULAS)
+     Ingrésela cuando Excel la solicite (al ejecutar la macro o al abrir el editor de
+     Visual Basic con Alt + F11).
+
+  DÓNDE TRABAJAR
+     Opción A: pegue los mayores en una hoja del mismo Excel que contiene la macro.
+     Opción B: abra su propio archivo de trabajo mientras el Excel de la macro sigue
+               abierto. La macro trabaja siempre sobre la HOJA ACTIVA, así que puede
+               ejecutarla desde su archivo (ver "Para ejecutarla").
+
+  PARA EJECUTARLA
+     1. Vaya a la hoja que contiene los datos (debe ser la hoja activa).
+     2. Presione Alt + F8.
+     3. Si trabaja en otro archivo, en "Macros en:" elija "Todos los libros abiertos".
+     4. Seleccione "Account_Offset_Engine_AM_v7" y presione "Ejecutar".
+     5. Si se solicita, ingrese la contraseña AM.
+
+  No cierre el Excel de la macro mientras la esté usando desde otro archivo.
+
+
+------------------------------------------------------------------------------------------
+4. PREPARAR LA HOJA
+------------------------------------------------------------------------------------------
+
+  - Ponga TODOS los movimientos a analizar en UNA SOLA HOJA, uno debajo del otro, con
+    los mismos encabezados. Ejemplo: primero el mayor de gasto y debajo el mayor de
+    pasivo. Así la macro puede cruzar una cuenta contra la otra.
+  - Debe existir una fila de encabezados (no importa en qué fila esté ni si arriba hay
+    títulos).
+  - Debe haber al menos:
+       * una columna de importe: SALDO, o DEBE y HABER por separado;
+       * una columna de CUENTA CONTABLE (recomendado).
+  - Mientras más columnas de referencia tenga (número de transacción, glosa, número de
+    documento, usuario, fecha), mejores y más sustentados serán los cruces.
+  - No deje filas vacías en medio de los datos: la macro considera que la base termina
+    en la primera fila totalmente vacía. Lo que esté debajo (totales, leyendas, tablas
+    dinámicas) no se toma en cuenta.
+  - Los importes pueden estar como número o como texto (ej. "1.234,56", "(1.234,56)",
+    "1234-"); la macro los interpreta correctamente.
+
+  Encabezados que la macro reconoce sola (si su mayor los trae con otro nombre, igual
+  puede elegirlos a mano):
+    NRO_TRANSACCION, GLOSA, NRO_DOCUMENTO, TIPO_DOCUMENTO, MODULO_ORIGEN,
+    CUENTA_CONTABLE, DEBE_BS, HABER_BS, SALDO, NOMBRE_USUARIO, FECHA_DOCUMENTO.
+
+
+------------------------------------------------------------------------------------------
+5. EJECUCIÓN PASO A PASO
+------------------------------------------------------------------------------------------
+
+Al ejecutar, la macro le hace preguntas en ventanas. En las ventanas para elegir celdas
+puede hacer clic directamente en la hoja; si la macro ya propone una celda, basta con
+presionar Aceptar.
+
+PASO 1 - IMPORTE
+  Haga clic en el ENCABEZADO de la columna de saldo.
+  Si su mayor trae DEBE y HABER en columnas separadas, mantenga presionada la tecla Ctrl
+  y haga clic en los DOS encabezados (primero DEBE, luego HABER), aunque haya otras
+  columnas entre ellos. La macro calcula Debe - Haber.
+
+PASO 2 - CUENTA CONTABLE
+  Haga clic en el encabezado de la cuenta contable.
+  Si presiona Cancelar, la macro no separa por cuenta (todo se trata como una sola
+  cuenta).
+
+PASO 3 - GRUPO DE CUENTA
+  Indique cuántos dígitos iniciales de la cuenta forman el grupo.
+  Con 1 (recomendado) se separan, por ejemplo, las cuentas 2... (Pasivo) de las 4...
+  (Gasto).
+
+CONFIRMACIÓN DE LA BASE
+  La macro muestra qué filas detectó como datos, qué columna usará como importe y si
+  encontró contenido debajo que NO va a incluir (totales, leyendas, tablas).
+    Sí       = continuar
+    No       = indicar usted la última fila de datos (clic en cualquier celda de esa fila)
+    Cancelar = salir sin hacer nada
+
+FILAS OCULTAS O FILTRADAS (solo si existen)
+    Sí = procesar solo las filas visibles (útil para analizar un segmento: un mes, una
+         subcuenta, etc.)
+    No = procesar todas las filas
+
+NIVELES DE CRUCE
+  La macro propone una lista de criterios ("niveles"), ordenados del más sólido al más
+  débil. Cada partida se cruza en el primer nivel que la encuentra.
+    Sí       = usar los niveles propuestos
+    No       = revisar uno por uno y decidir cuáles usar
+    Cancelar = salir
+  Luego pregunta si desea AGREGAR una combinación propia. Si responde Sí, seleccione con
+  Ctrl+clic los encabezados de las columnas que deben coincidir (por ejemplo
+  NRO_DOCUMENTO + NOMBRE_USUARIO). No hace falta incluir el importe; la macro lo agrega.
+  Puede agregar varias combinaciones; responda No cuando termine.
+  La próxima vez la macro le propondrá los niveles que usó en esta ejecución.
+
+CORTE PRELIMINAR
+  Muestra cuántas partidas se cruzaron en cada nivel y cuánto queda pendiente por cuenta
+  y por signo. Solo informa; presione Aceptar.
+
+OPCIÓN FINAL (sobre lo que quedó pendiente)
+  Escriba el número de la opción:
+    1 = Fuerza bruta (FB): busca combinaciones de partidas que sumen cero usando solo los
+        importes. Le pedirá:
+          - Materialidad: importe máximo por partida a considerar (0 = sin límite). Puede
+            escribirlo o hacer clic en una celda que lo contenga.
+          - Partidas por combinación: 2 = solo pares (uno contra uno); 3 a 6 = una
+            partida contra varias.
+          - Si desea que solo se combinen partidas que compartan una columna (por
+            ejemplo, la misma cuenta contable o el mismo proveedor).
+        Tiene un tiempo máximo de ejecución; si lo alcanza, conserva lo encontrado hasta
+        ese momento.
+    2 = Absorción asimétrica (ASI): liquida los saldos acreedores pendientes contra los
+        deudores de la misma cuenta. Puede dejar una pequeña diferencia (varianza); la
+        macro se la muestra y le pide autorización antes de registrar cada bloque.
+    0 = Ninguna.
+  Los cruces de esta etapa tienen menos sustento que los de los niveles; por eso se
+  identifican aparte (FB o ASI) para que se revisen.
+
+NOMBRES PARA LAS PARTIDAS SIN CRUCE
+  La macro muestra cuántas partidas quedaron sin cruzar y qué nombre recibirán:
+    Gasto / Resultado (+)  -> Pagos
+    Gasto / Resultado (-)  -> Ajuste
+    Pasivo / Balance (+)   -> Pagos
+    Pasivo / Balance (-)   -> Otras Provisiones/Reversiones
+  Además, si en el pasivo la glosa menciona una cuenta de gasto distinta a las de la
+  base, la partida se marca como "Otras Provisiones/Reversiones" seguida de esa cuenta.
+    Sí = usar estos nombres
+    No = escribir otros nombres (la macro los recordará para la próxima vez)
+
+UBICACIÓN DE LOS RESULTADOS
+    Sí       = agregar las 4 columnas al final de la tabla
+    No       = insertarlas a la derecha de la columna que usted elija (clic en una celda
+               de esa columna)
+    Cancelar = salir sin escribir resultados
+  Si la hoja ya tiene columnas de resultado de una ejecución anterior, la macro pregunta
+  si desea sobrescribirlas o crear columnas nuevas.
+
+DICTAMEN FINAL
+  Resumen por clasificación y por cuenta, control de cuadre y tiempo de proceso
+  (ver punto 7).
+
+
+------------------------------------------------------------------------------------------
+6. CÓMO LEER LOS RESULTADOS
+------------------------------------------------------------------------------------------
+
+Se agregan 4 columnas:
+
+  Clasificación          Categoría general. Es la columna para FILTRAR.
+                         Valores: Provisiones/Reversiones, Neto, Pagos, Ajuste,
+                         Otras Provisiones/Reversiones, Neto asimétrico.
+
+  Detalle Clasificación  La misma categoría con más detalle, por ejemplo la cuenta de
+                         gasto involucrada ("Provisiones/Reversiones 45902").
+
+  ID Cruce               Código del cruce. Todas las partidas con el mismo ID se
+                         compensan entre sí (suman cero). Filtre por un ID para ver
+                         juntas las partidas de un cruce.
+                           PREV-0001  cruce entre cuentas distintas (ej. gasto con
+                                      pasivo): provisión / reversión.
+                           NET-0001   cruce dentro de la misma cuenta: registro y su
+                                      reverso, o regularización.
+                           FB-0001    encontrado por fuerza bruta (solo por importe).
+                           ASI-0001   absorción asimétrica (puede tener varianza).
+                         Las partidas sin cruce no tienen ID.
+
+  Criterio               Por qué se cruzó: las columnas que coincidieron (ej.
+                         "NRO_TRANSACCION + GLOSA"), si fue un reverso que cita el
+                         comprobante original, si se cruzó en grupo ("N a N") o por
+                         fuerza bruta. "Sin cruce" = partida residual.
+                         "Importe no válido" = la celda de importe tenía un error o un
+                         texto que no es número (revísela).
+
+Cómo interpretar las categorías:
+  Provisiones/Reversiones  Partidas que se anulan entre la cuenta de gasto y la de
+                           pasivo (constitución o reversión de provisiones).
+  Neto                     Partidas que se anulan dentro de la misma cuenta.
+  Pagos                    Saldos sin contrapartida: gasto efectivo (en gasto) o pago
+                           contra la provisión (en pasivo). Normalmente es el universo a
+                           muestrear.
+  Ajuste                   Saldos acreedores del gasto sin contrapartida.
+  Otras Provisiones/Rev.   Saldos acreedores del pasivo sin contrapartida en la base.
+  Neto asimétrico          Bloques registrados con absorción asimétrica (con varianza).
+
+Verificación sugerida (tabla dinámica):
+  Filas = Clasificación, Columnas = Cuenta, Valores = Suma del importe.
+  - Las filas Neto y Provisiones/Reversiones deben sumar cero en total.
+  - El total por cuenta debe coincidir con el saldo del mayor.
+
+
+------------------------------------------------------------------------------------------
+7. REPORTES EN PANTALLA
+------------------------------------------------------------------------------------------
+
+CORTE PRELIMINAR
+  - Partidas con importe y cuántas se cruzaron (en cantidad y porcentaje).
+  - Cruces y partidas por cada nivel.
+  - Pendientes por cuenta y signo, con su importe.
+
+DICTAMEN FINAL
+  - Cantidad de partidas e importe por clasificación y por cuenta.
+  - Total por cuenta (debe coincidir con el saldo del mayor).
+  - Control: Neto + Provisiones/Reversiones debe sumar 0,00 ("cuadra").
+  - Cantidad de cruces por tipo (PREV, NET, FB, ASI).
+  - Filas no procesadas (importe no válido, vacías, en cero u ocultas).
+  - Celdas de texto convertidas a número.
+  - Tiempo de proceso.
+
+
+------------------------------------------------------------------------------------------
+8. RECOMENDACIONES DE USO
+------------------------------------------------------------------------------------------
+
+  - Use primero solo los niveles por llave y revise el corte preliminar antes de aplicar
+    fuerza bruta o absorción asimétrica.
+  - Los niveles más débiles (por ejemplo, usuario + fecha) pueden cruzar operaciones
+    automáticas del sistema que no son contrapartida real. Si tiene dudas, omítalos
+    (opción "No = elegir uno por uno").
+  - En la fuerza bruta, empiece con 2 partidas por combinación (pares). Con más partidas
+    aumenta la posibilidad de cruces casuales entre montos que no tienen relación.
+  - Revise siempre una muestra de cada tipo de cruce (PREV, NET y en especial FB y ASI)
+    filtrando por ID Cruce.
+  - Para repetir el análisis con otros criterios, vuelva a ejecutar la macro y elija
+    "sobrescribir" cuando pregunte por las columnas existentes.
+  - Documente en su papel de trabajo los niveles utilizados (aparecen en la columna
+    Criterio).
+
+
+------------------------------------------------------------------------------------------
+9. PROBLEMAS FRECUENTES
+------------------------------------------------------------------------------------------
+
+  "La hoja está protegida"
+      Desproteja la hoja (Revisar > Desproteger hoja) y vuelva a ejecutar.
+
+  "No hay datos debajo de la fila de encabezados" / "No se detectaron partidas"
+      Verifique que hizo clic en la fila de ENCABEZADOS y que no hay una fila vacía
+      justo debajo.
+
+  La base detectada termina antes de lo esperado
+      Hay una fila vacía en medio de los datos. Responda "No" en la confirmación e
+      indique la última fila, o elimine la fila vacía.
+
+  "No se encontraron importes válidos"
+      La columna elegida no tiene números. Revise que eligió la columna correcta.
+
+  Muchas partidas con "Importe no válido"
+      La columna de importe tiene errores (#N/A, #¡VALOR!) o textos. Corríjalos y vuelva
+      a ejecutar.
+
+  Se presionó Esc
+      La macro se detiene sin escribir resultados.
+
+  Cualquier otro error
+      Anote el mensaje completo y su número, y en qué paso apareció. No se pierden
+      datos: la macro escribe los resultados recién al final.
+
+
+------------------------------------------------------------------------------------------
+10. PREGUNTAS FRECUENTES
+------------------------------------------------------------------------------------------
+
+  ¿Puedo usarla con un mayor de otro formato?
+      Sí. Si los encabezados tienen otros nombres, la macro no los propone, pero usted
+      los elige con clic.
+
+  ¿Puedo cruzar solo un mayor (sin pasivo)?
+      Sí. En ese caso todos los cruces serán "Neto".
+
+  ¿Qué pasa si el mismo importe aparece muchas veces?
+      La macro primero exige que coincidan las columnas de referencia del nivel, por lo
+      que no cruza importes iguales que no tienen relación. Solo la fuerza bruta cruza
+      por importe, y lo marca como FB.
+
+  ¿Puedo cambiar los nombres de las categorías?
+      Los nombres de las partidas sin cruce se cambian en la misma ejecución.
+
+  ¿Se pueden filtrar los resultados?
+      Sí. Si la hoja tenía autofiltro sin filtros aplicados, las columnas nuevas se
+      incluyen en él; si no, aplique el filtro de nuevo (Datos > Filtro).
+
+==========================================================================================
+                                        A.M.
+==========================================================================================
